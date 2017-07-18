@@ -1,5 +1,0 @@
-C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\JobShop_flexible\bin\Debug\netcoreapp1.1\JobShop_flexible.deps.json
-C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\JobShop_flexible\bin\Debug\netcoreapp1.1\JobShop_flexible.runtimeconfig.json
-C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\JobShop_flexible\bin\Debug\netcoreapp1.1\JobShop_flexible.runtimeconfig.dev.json
-C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\JobShop_flexible\obj\Debug\netcoreapp1.1\JobShop_flexible.csprojResolveAssemblyReference.cache
-C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\JobShop_flexible\obj\Debug\netcoreapp1.1\JobShop_flexible.AssemblyInfo.cs
