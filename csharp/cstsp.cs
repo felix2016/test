@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using Google.OrTools.ConstraintSolver;
 
+public delegate long Calculate(int value1, int value2);
 class Tsp
 {
   class RandomManhattan : NodeEvaluator2 {
@@ -54,6 +55,8 @@ class Tsp
     // has the following signature: ResultCallback2<int64, int64, int64>.
     // The two arguments are the from and to node inidices.
     RandomManhattan distances = new RandomManhattan(size, seed);
+        Calculate calc = new Calculate(distances.Run);
+    long l=    distances.Run();
     routing.SetCost(distances);
 
     // Forbid node connections (randomly).
