@@ -1,0 +1,7 @@
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\bin\x64\Debug\Magic_square_and_cards.exe.config
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\bin\x64\Debug\Magic_square_and_cards.exe
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\bin\x64\Debug\Magic_square_and_cards.pdb
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\bin\x64\Debug\Google.OrTools.dll
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\bin\x64\Debug\Google.Protobuf.dll
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\obj\x64\Debug\Magic_square_and_cards.exe
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\solution\obj\x64\Debug\Magic_square_and_cards.pdb

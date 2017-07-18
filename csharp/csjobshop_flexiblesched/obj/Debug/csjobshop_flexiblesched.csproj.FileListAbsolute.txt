@@ -1,0 +1,8 @@
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\obj\Debug\csjobshop_flexiblesched.exe
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\bin\Debug\csjobshop_flexiblesched.exe.config
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\bin\Debug\csjobshop_flexiblesched.exe
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\bin\Debug\csjobshop_flexiblesched.pdb
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\bin\Debug\Google.OrTools.dll
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\bin\Debug\Google.Protobuf.dll
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\obj\Debug\csjobshop_flexiblesched.pdb
+C:\Users\fb\Downloads\or-tools_VisualStudio2017-64bit_v6.2.4388\or-tools_VisualStudio2017-64bit_v6.2.4388\examples\csharp\csjobshop_flexiblesched\obj\Debug\csjobshop_flexiblesched.csprojResolveAssemblyReference.cache
