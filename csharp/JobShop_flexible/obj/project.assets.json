@@ -7042,10 +7042,10 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fb\\Downloads\\or-tools_VisualStudio2017-64bit_v6.2.4388\\or-tools_VisualStudio2017-64bit_v6.2.4388\\examples\\csharp\\JobShop_flexible\\JobShop_flexible.csproj",
+      "projectUniqueName": "C:\\Users\\fb\\Documents\\GitHub\\test\\csharp\\JobShop_flexible\\JobShop_flexible.csproj",
       "projectName": "JobShop_flexible",
-      "projectPath": "C:\\Users\\fb\\Downloads\\or-tools_VisualStudio2017-64bit_v6.2.4388\\or-tools_VisualStudio2017-64bit_v6.2.4388\\examples\\csharp\\JobShop_flexible\\JobShop_flexible.csproj",
-      "outputPath": "C:\\Users\\fb\\Downloads\\or-tools_VisualStudio2017-64bit_v6.2.4388\\or-tools_VisualStudio2017-64bit_v6.2.4388\\examples\\csharp\\JobShop_flexible\\obj\\",
+      "projectPath": "C:\\Users\\fb\\Documents\\GitHub\\test\\csharp\\JobShop_flexible\\JobShop_flexible.csproj",
+      "outputPath": "C:\\Users\\fb\\Documents\\GitHub\\test\\csharp\\JobShop_flexible\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"

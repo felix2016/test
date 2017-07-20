@@ -61,12 +61,22 @@ namespace JobShop_flexible
             int horizon = data.horizon;
             int[] setupTime = new int[3];
             int[] type = new int[3];
+            setupTime = new int[4] { 0, 0, 0 ,0};
+            type = new int[4] { 0, 0, 0,0 };
             Console.WriteLine(data.DebugString());
 
             Dictionary<int, List<TaskAlternative>> jobs_to_tasks = new Dictionary<int, List<TaskAlternative>>();
+            for (int i = 0; i < 3; i++)
+            {
+                jobs_to_tasks[i] = new List<TaskAlternative>();
+            }
             // machines_to_tasks stores the same interval variables as above, but
             // grouped my machines instead of grouped by jobs.
             Dictionary<int, IntervalVarVector> machines_to_tasks = new Dictionary<int, IntervalVarVector>();
+            for (int i = 0; i < 3; i++)
+            {
+                machines_to_tasks[i] = new IntervalVarVector();
+            }
 
             // Creates all individual interval variables.
             for (int job_id = 0; job_id < job_count; ++job_id)
@@ -84,7 +94,7 @@ namespace JobShop_flexible
                     {
                         int machine_id = task.machines[alt];
                         int duration = task.durations[alt];
-                        string name = string.Format("J%dI%dA%dM%dD%d",
+                        string name = string.Format("J{0}I{1}A{2}M{3}D{4}",
                                                         task.job_id,
                                                         task_index,
                                                         alt,
@@ -99,7 +109,7 @@ namespace JobShop_flexible
                             active_variables.Add(interval.PerformedExpr().Var());
                         }
                     }
-                    string alternative_name = string.Format("J%dI%d", job_id, task_index);
+                    string alternative_name = string.Format("J{0}I{1}", job_id, task_index);
                     IntVar alt_var =
                         solver.MakeIntVar(0, task.machines.Count - 1, alternative_name);
                     jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1].alternative_variable = alt_var;
@@ -133,14 +143,14 @@ namespace JobShop_flexible
             SequenceVarVector all_sequences = new SequenceVarVector();
             for (int machine_id = 0; machine_id < machine_count; ++machine_id)
             {
-                string name = string.Format("Machine_%d", machine_id);
+                string name = string.Format("Machine_{0}", machine_id);
                 DisjunctiveConstraint ct =
                      solver.MakeDisjunctiveConstraint(machines_to_tasks[machine_id], name);
 
 
                 SetupTime distances = new SetupTime(type, setupTime);
 
-                ct.SetTransitionTime(distances);
+              //  ct.SetTransitionTime(distances);
                 solver.Add(ct);
                 all_sequences.Add(ct.SequenceVar());
             }
@@ -214,12 +224,32 @@ namespace JobShop_flexible
                              limit,
                              collector))
             {
+                const int SOLUTION_INDEX = 0;
+                Assignment solution = collector.Solution(SOLUTION_INDEX);
                 for (int m = 0; m < machine_count; ++m)
                 {
                     SequenceVar seq = all_sequences[m];
+                    int[] storedSequence = collector.ForwardSequence(SOLUTION_INDEX, seq);
+                    foreach (int taskIndex in storedSequence)
+                    {
+                        IntervalVar task = seq.Interval(0);
+                        long startMin = solution.StartValue(task);
+                        long startMax = solution.StartMax(task);
+                        if (startMin == startMax)
+                        {
+                            Console.WriteLine("Task " + task.Name() + " starts at " +
+                                            startMin + ".");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Task " + task.Name() + " starts between " +
+                                            startMin + " and " + startMax + ".");
+                        }
+                    }
                     //LOG(INFO) << seq->name() << ": "
                     //          << strings::Join(collector->ForwardSequence(0, seq), ", ");
                 }
+                Console.ReadLine();
             }
 
 
