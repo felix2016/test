@@ -1,0 +1,7 @@
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\x86\Debug\FlexibleJS.exe.config
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\x86\Debug\FlexibleJS.exe
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\x86\Debug\FlexibleJS.pdb
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\x86\Debug\Google.OrTools.dll
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\x86\Debug\Google.Protobuf.dll
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\obj\x86\Debug\FlexibleJS.exe
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\obj\x86\Debug\FlexibleJS.pdb
