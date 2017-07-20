@@ -61,8 +61,8 @@ namespace JobShop_flexible
             int horizon = data.horizon;
             int[] setupTime = new int[3];
             int[] type = new int[3];
-            setupTime = new int[4] { 0, 0, 0 ,0};
-            type = new int[4] { 0, 0, 0,0 };
+            setupTime = new int[4] { 0, 0, 0, 0 };
+            type = new int[4] { 0, 0, 0, 0 };
             Console.WriteLine(data.DebugString());
 
             Dictionary<int, List<TaskAlternative>> jobs_to_tasks = new Dictionary<int, List<TaskAlternative>>();
@@ -148,9 +148,9 @@ namespace JobShop_flexible
                      solver.MakeDisjunctiveConstraint(machines_to_tasks[machine_id], name);
 
 
-                SetupTime distances = new SetupTime(type, setupTime);
+                 SetupTime distances = new SetupTime(type, setupTime);
 
-              //  ct.SetTransitionTime(distances);
+                //  ct.SetTransitionTime(distances);
                 solver.Add(ct);
                 all_sequences.Add(ct.SequenceVar());
             }
@@ -217,43 +217,54 @@ namespace JobShop_flexible
             collector.Add(all_alternative_variables);
             collector.Add(all_sequences);
 
-            // Search.
-            if (solver.Solve(main_phase,
-                             search_log,
-                             objective_monitor,
-                             limit,
-                             collector))
+
+            solver.NewSearch(main_phase, objective_monitor, search_log, limit);
+            if (solver.NextSolution())
             {
-                const int SOLUTION_INDEX = 0;
-                Assignment solution = collector.Solution(SOLUTION_INDEX);
+
                 for (int m = 0; m < machine_count; ++m)
                 {
+                    Console.WriteLine("Machine " + m + " :");
                     SequenceVar seq = all_sequences[m];
-                    int[] storedSequence = collector.ForwardSequence(SOLUTION_INDEX, seq);
-                    foreach (int taskIndex in storedSequence)
+
+                    for (int taskIndex = 0; taskIndex < seq.Size(); taskIndex++)
                     {
-                        IntervalVar task = seq.Interval(0);
-                        long startMin = solution.StartValue(task);
-                        long startMax = solution.StartMax(task);
-                        if (startMin == startMax)
+                        IntervalVar task = seq.Interval(taskIndex);
+
+                        if (task.PerformedExpr().Var ().Value ()==1)
                         {
-                            Console.WriteLine("Task " + task.Name() + " starts at " +
-                                            startMin + ".");
+                            long startMin = task.StartMin();
+                            long startMax = task.StartMax();
+                            if (startMin == startMax)
+                            {
+                                Console.WriteLine("Task " + task.Name() + " starts at " +
+                                                startMin + ".");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Task " + task.Name() + " starts between " +
+                                                startMin + " and " + startMax + ".");
+                            }
                         }
                         else
                         {
-                            Console.WriteLine("Task " + task.Name() + " starts between " +
-                                            startMin + " and " + startMax + ".");
+                            Console.WriteLine("Task " + task.Name() + " was will not be performed on this machine.");
                         }
+
                     }
-                    //LOG(INFO) << seq->name() << ": "
-                    //          << strings::Join(collector->ForwardSequence(0, seq), ", ");
                 }
                 Console.ReadLine();
+
             }
+
+            Console.ReadLine();
+           
+
+
+
 
 
         }
     }
-
 }
+
