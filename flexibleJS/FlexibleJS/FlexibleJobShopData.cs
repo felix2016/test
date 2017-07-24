@@ -59,16 +59,17 @@ namespace csjobshop_flexiblesched
             machines.Add(0);
             durations.Add(7);
             machines.Add(1);
-            durations.Add(7);
+            durations.Add(2);
             machines.Add(2);
             durations.Add(4);
+            AddTask(0, machines, durations,1);
             AddTask(1, machines, durations);
             machines = new List<int>();
             durations = new List<int>();
             machines.Add(0);
             durations.Add(7);
             machines.Add(1);
-            durations.Add(2);
+            durations.Add(7);
             machines.Add(2);
             durations.Add(4);
             AddTask(2, machines, durations);
@@ -117,9 +118,9 @@ namespace csjobshop_flexiblesched
         }
 
         void AddTask(int job_id, List<int> machines,
-               List<int> durations)
+               List<int> durations, int t =0)
         {
-            all_tasks_[job_id].Add(new Task(job_id, machines, durations));
+            all_tasks_[job_id].Add(new Task(job_id, machines, durations, t));
             horizon += SumOfDurations(durations);
         }
 

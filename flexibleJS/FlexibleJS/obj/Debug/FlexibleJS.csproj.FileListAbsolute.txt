@@ -5,3 +5,11 @@ C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\Debug\Google.OrTools
 C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\bin\Debug\Google.Protobuf.dll
 C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.exe
 C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.pdb
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\bin\Debug\FlexibleJS.exe.config
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\bin\Debug\FlexibleJS.exe
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\bin\Debug\FlexibleJS.pdb
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\bin\Debug\Google.OrTools.dll
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\bin\Debug\Google.Protobuf.dll
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.csprojResolveAssemblyReference.cache
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.exe
+C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.pdb

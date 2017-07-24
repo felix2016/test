@@ -13,10 +13,12 @@ namespace csjobshop_flexiblesched
         public List<int> durations;
         public int type;
 
-        public Task(int j, List<int> m, List<int> d)
+
+        public Task(int j, List<int> m, List<int> d, int t)
         {
             job_id = j;
             machines = m; durations = d;
+            type = t;
         }
 
         public string DebugString()
