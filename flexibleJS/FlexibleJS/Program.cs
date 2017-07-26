@@ -189,6 +189,43 @@ namespace JobShop_flexible
             }
 
 
+
+            // Add dependencies between the tasks related to a job.
+            
+            for (int job_id = 0; job_id < job_count; ++job_id)
+            {
+                List<Task> tasks = data.TasksOfJob(job_id);
+                for (int task_index = 0; task_index < tasks.Count ; ++task_index)
+                {
+                    if (tasks[task_index].dependencies != null)
+                    {
+                        foreach (var dep in tasks[task_index].dependencies)
+                        {
+                            var other_jobid = dep.OtherTask.job_id;
+                            var other_taskid = data.TasksOfJob(other_jobid).IndexOf(dep.OtherTask);
+
+                            TaskAlternative task_alt = jobs_to_tasks[job_id][task_index];
+                            TaskAlternative task_alt_other_task = jobs_to_tasks[other_jobid][other_taskid];
+                            foreach (var alt in task_alt.intervals )
+                            {
+                                foreach (var other_alt in task_alt_other_task.intervals)
+                                {
+                                    solver.Add (alt.StartsAfterStartWithDelay(other_alt, dep.Delay));
+                                }
+
+                            }
+                            
+
+                        }
+                        
+                    }
+
+
+                    
+                }
+            }
+
+
             // Objective: minimize the makespan (maximum end times of all tasks)
             // of the problem.
             IntVar objective_var = solver.MakeMax(all_ends).Var();

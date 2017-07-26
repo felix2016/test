@@ -11,14 +11,20 @@ namespace csjobshop_flexiblesched
         public int job_id;
         public List<int> machines;
         public List<int> durations;
+        public List<TaskDependency> dependencies;
         public int type;
 
 
-        public Task(int j, List<int> m, List<int> d, int t)
+        public Task(int j, List<int> m, List<int> d, int t, List<TaskDependency> dp =null)
         {
             job_id = j;
             machines = m; durations = d;
             type = t;
+            dependencies = dp;
+            if (dependencies == null)
+            {
+                dependencies = new List<TaskDependency>();
+            }
         }
 
         public string DebugString()
@@ -37,4 +43,13 @@ namespace csjobshop_flexiblesched
         }
 
     }
+
+    public class TaskDependency 
+    {
+        public Task OtherTask;
+        public long Delay; // delay after starting the other task;
+
+        
+    }
 }
+

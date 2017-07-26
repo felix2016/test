@@ -49,7 +49,7 @@ namespace csjobshop_flexiblesched
             List<int> machines = new List<int>();
             List<int> durations = new List<int>();
             machines.Add(0);
-            durations.Add(5);
+            durations.Add(2);
             machines.Add(1);
             durations.Add(2);
             machines.Add(2);
@@ -58,13 +58,19 @@ namespace csjobshop_flexiblesched
             machines = new List<int>();
             durations = new List<int>();
             machines.Add(0);
-            durations.Add(7);
+            durations.Add(20);
             machines.Add(1);
-            durations.Add(2);
+            durations.Add(25);
             machines.Add(2);
-            durations.Add(4);
+            durations.Add(27);
            // AddTask(0, machines, durations, 1);
-            AddTask(1, machines, durations);
+            AddTask(0, machines, durations);
+            var task = TasksOfJob(0)[0] ;
+            var otherTask = TasksOfJob(0)[1];
+            task.dependencies.Add(new TaskDependency() { OtherTask = otherTask, Delay =12 }); // task 0 starts after task 1 is started with 12 unit of time delay
+
+
+
             machines = new List<int>();
             durations = new List<int>();
             machines.Add(0);
@@ -73,7 +79,12 @@ namespace csjobshop_flexiblesched
             durations.Add(7);
             machines.Add(2);
             durations.Add(4);
-            AddTask(2, machines, durations);
+            AddTask(0, machines, durations);
+
+            task = TasksOfJob(0)[2];
+            otherTask = TasksOfJob(0)[0];
+            task.dependencies.Add(new TaskDependency() { OtherTask = otherTask, Delay = 10 }); // task 2 starts after task 0 is started with 10 unit of time delay
+
             current_job_index = 3;
 
 
