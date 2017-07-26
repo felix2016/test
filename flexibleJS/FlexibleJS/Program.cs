@@ -64,8 +64,8 @@ namespace JobShop_flexible
             //setupTime = new int[4] { 2, 5, 7, 7 };
 
             SetupTime.TaskTypeSetupTime = new Dictionary<int, long>();
-            SetupTime.TaskTypeSetupTime.Add(0, 5);
-            SetupTime.TaskTypeSetupTime.Add(1, 2);
+            SetupTime.TaskTypeSetupTime.Add(0, 0);
+            SetupTime.TaskTypeSetupTime.Add(1, 0);
 
             SetupTime.TaskIntervalToTaskType = new Dictionary<IntervalVar, int>();
             
@@ -172,11 +172,19 @@ namespace JobShop_flexible
             IntVarVector all_ends = new IntVarVector();
             for (int job_id = 0; job_id < job_count; ++job_id)
             {
-                TaskAlternative task_alt = jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1];
-                for (int alt = 0; alt < task_alt.intervals.Count; ++alt)
+
+
+                for (int task_index = 0; task_index < jobs_to_tasks[job_id].Count; ++task_index)
                 {
-                    IntervalVar t = task_alt.intervals[alt];
-                    all_ends.Add(t.EndExpr().Var());
+
+                    TaskAlternative task_alt = jobs_to_tasks[job_id][task_index];
+                    for (int alt = 0; alt < task_alt.intervals.Count; ++alt)
+                    {
+                        IntervalVar t = task_alt.intervals[alt];
+
+                        all_ends.Add(solver.MakeProd(t.PerformedExpr().Var(), t.EndExpr().Var()).Var());
+                        //all_ends.Add(t.EndExpr().Var());
+                    }
                 }
             }
 
@@ -232,8 +240,8 @@ namespace JobShop_flexible
 
             JobshopAssessment objectiveAssessment = new JobshopAssessment(solver) { all_ends = all_ends };
 
-            //solver.NewSearch(main_phase, objective_monitor, search_log, limit);
-            solver.NewSearch(main_phase, objectiveAssessment, search_log, limit);
+            solver.NewSearch(main_phase, objective_monitor, search_log);
+            //solver.NewSearch(main_phase, objectiveAssessment, search_log);
             
             while (solver.NextSolution())
             {
@@ -319,26 +327,30 @@ namespace JobShop_flexible
 
             if (result)
             {
-            var max = Int64.MinValue;
+                long max = 0;// Int64.MinValue;
            // Console.WriteLine("===========");
+                var s = "";
             foreach (var item in all_ends)
             {
-                if (item.Bound())
+                if (item.Bound() )
                 {
-                    max = Math.Max(item.Value(), max);
-                  //  Console.WriteLine(item.Value() + "  "+ max);
+                   // max = Math.Max(item.Value(), max);
+                    max+= item.Value();
+                    s += item.Value() + ", ";
+                    //Console.WriteLine(item.Value() + "  "+ max);
                 }
                 else
                 {
                     //Console.WriteLine(item.Max() + "  " + max);
-                    max = Math.Max(item.Max(), max);
+                    max+= item.Min();
+                    s += item.Min() + ", ";
                 }
             }
             if (bestObjectiveValue >= max)
             {
                 bestObjectiveValue = max;
 
-               Console.WriteLine("acepted=================== # " + slNo + " Objective Value:" + bestObjectiveValue);
+               Console.WriteLine("acepted=================== # " + slNo + " Objective Value:" + bestObjectiveValue + " s= " + s);
                 slNo++;
                 return true;
             }

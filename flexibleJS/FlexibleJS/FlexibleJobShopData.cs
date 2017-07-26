@@ -43,16 +43,17 @@ namespace csjobshop_flexiblesched
         }
         public void Load()
         {
+
             job_count = 3;
             machine_count = 3;
             List<int> machines = new List<int>();
             List<int> durations = new List<int>();
             machines.Add(0);
-            durations.Add(7);
+            durations.Add(5);
             machines.Add(1);
             durations.Add(2);
             machines.Add(2);
-            durations.Add(7);
+            durations.Add(18);
             AddTask(0, machines, durations);
             machines = new List<int>();
             durations = new List<int>();
@@ -62,7 +63,7 @@ namespace csjobshop_flexiblesched
             durations.Add(2);
             machines.Add(2);
             durations.Add(4);
-            AddTask(0, machines, durations,1);
+           // AddTask(0, machines, durations, 1);
             AddTask(1, machines, durations);
             machines = new List<int>();
             durations = new List<int>();
@@ -74,6 +75,8 @@ namespace csjobshop_flexiblesched
             durations.Add(4);
             AddTask(2, machines, durations);
             current_job_index = 3;
+
+
 
         }
 
