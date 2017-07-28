@@ -55,3 +55,7 @@ csharp/JobShop_flexible/obj/project.assets.json
 csharp/JobShop_flexible/obj/JobShop_flexible.csproj.nuget.g.props
 csharp/csjobshop_flexiblesched/obj/Debug/csjobshop_flexiblesched.csproj.FileListAbsolute.txt
 csharp/csjobshop_flexiblesched/obj/Debug/csjobshop_flexiblesched.csproj.FileListAbsolute.txt
+*.pdb
+flexibleJS/FlexibleJS/obj/Debug/FlexibleJS.exe
+*.exe
+*.pdb

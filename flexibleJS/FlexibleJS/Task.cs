@@ -13,6 +13,9 @@ namespace csjobshop_flexiblesched
         public List<int> durations;
         public List<TaskDependency> dependencies;
         public int type;
+        public int Start { get; set; }
+        public int MachineID { get; set; }
+        public bool IsFixed { get; set; }
 
 
         public Task(int j, List<int> m, List<int> d, int t, List<TaskDependency> dp =null)

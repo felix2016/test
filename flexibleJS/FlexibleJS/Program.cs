@@ -107,17 +107,32 @@ namespace JobShop_flexible
                                                         machine_id,
                                                         duration,
                                                         task.type );
-                        IntervalVar interval = solver.MakeFixedDurationIntervalVar(
-                             0, horizon, duration, optional, name);
-                        jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1].intervals.Add(interval);
-                        machines_to_tasks[machine_id].Add(interval);
-
-                        SetupTime.TaskIntervalToTaskType.Add(interval, task.type);
-
-                        if (optional)
+                        IntervalVar interval=null;
+                        if (task.IsFixed ==false)
                         {
-                            active_variables.Add(interval.PerformedExpr().Var());
+                            interval = solver.MakeFixedDurationIntervalVar(
+                                 0, horizon, duration, optional, name);
+                            jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1].intervals.Add(interval);
+                            machines_to_tasks[machine_id].Add(interval);
+                            
                         }
+                        else
+                        {
+                            if (task.IsFixed && machine_id==task.MachineID)
+                            {
+                                interval = solver.MakeFixedDurationIntervalVar(task.Start, task.Start, duration, optional, name);
+                                machines_to_tasks[machine_id].Add(interval);
+                            }
+                        }
+                        if (interval != null)
+                        {
+                            SetupTime.TaskIntervalToTaskType.Add(interval, task.type);
+                            if (optional)
+                            {
+                                active_variables.Add(interval.PerformedExpr().Var());
+                            }
+                        }
+
                     }
                     string alternative_name = string.Format("J{0}I{1}", job_id, task_index);
                     IntVar alt_var =
