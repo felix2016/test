@@ -82,6 +82,12 @@ namespace csjobshop_flexiblesched
             AddTask(0, machines, durations);
 
             task = TasksOfJob(0)[2];
+            //make task fixed
+            task.IsFixed = true;
+            task.MachineID = 1;
+            task.Start = 40;
+
+
             otherTask = TasksOfJob(0)[0];
             task.dependencies.Add(new TaskDependency() { OtherTask = otherTask, Delay = 10 }); // task 2 starts after task 0 is started with 10 unit of time delay
 

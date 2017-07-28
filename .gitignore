@@ -59,3 +59,7 @@ csharp/csjobshop_flexiblesched/obj/Debug/csjobshop_flexiblesched.csproj.FileList
 flexibleJS/FlexibleJS/obj/Debug/FlexibleJS.exe
 *.exe
 *.pdb
+flexibleJS/FlexibleJS/bin/Debug/FlexibleJS.pdb
+*.exe
+*.exe
+flexibleJS/FlexibleJS/obj/Debug/FlexibleJS.csproj.FileListAbsolute.txt
