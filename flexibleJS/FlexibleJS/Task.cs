@@ -14,16 +14,19 @@ namespace csjobshop_flexiblesched
         public List<TaskDependency> dependencies;
         public int type;
         public int Start { get; set; }
+        public int End { get; set; }
         public int MachineID { get; set; }
-        public bool IsFixed { get; set; }
+        public bool IsFixedStart { get; set; }
+        public bool IsFixedEnd { get; set; }
+        public int TaskIndexForJob;
 
-
-        public Task(int j, List<int> m, List<int> d, int t, List<TaskDependency> dp =null)
+        public Task(int j, List<int> m, List<int> d, int t,int index, List<TaskDependency> dp =null)
         {
             job_id = j;
             machines = m; durations = d;
             type = t;
             dependencies = dp;
+            TaskIndexForJob = index;
             if (dependencies == null)
             {
                 dependencies = new List<TaskDependency>();

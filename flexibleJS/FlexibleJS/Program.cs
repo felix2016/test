@@ -108,21 +108,32 @@ namespace JobShop_flexible
                                                         duration,
                                                         task.type );
                         IntervalVar interval=null;
-                        if (task.IsFixed ==false)
+                        if (task.IsFixedStart ==false)
                         {
+                            if(!task.IsFixedEnd)
                             interval = solver.MakeFixedDurationIntervalVar(
                                  0, horizon, duration, optional, name);
+                            else
+                            {
+                                interval = solver.MakeFixedDurationIntervalVar(0, task.End-duration, duration, optional, name);
+                               // interval = solver.MakeIntervalVar(0, horizon, duration, duration, task.End, task.End, optional, name);
+                            }
                             jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1].intervals.Add(interval);
                             machines_to_tasks[machine_id].Add(interval);
                             
                         }
                         else
                         {
-                            if (task.IsFixed && machine_id==task.MachineID)
+                            if (task.IsFixedStart && machine_id==task.MachineID)
                             {
                                 interval = solver.MakeFixedDurationIntervalVar(task.Start, task.Start, duration, optional, name);
                                 machines_to_tasks[machine_id].Add(interval);
                             }
+                            //if (task.IsFixedEnd)
+                            //{
+                            //    interval = solver.MakeIntervalVar(0, horizon, duration, duration, task.End, task.End, optional, name);
+                            //    machines_to_tasks[machine_id].Add(interval);
+                            //}
                         }
                         if (interval != null)
                         {
@@ -178,7 +189,7 @@ namespace JobShop_flexible
                  SetupTime distances = new SetupTime(machines_to_tasks[machine_id]);
                  all_distances.Add(distances);
 
-                ct.SetTransitionTime(distances);
+                 ct.SetTransitionTime(distances);
                 solver.Add(ct);
                 all_sequences.Add(ct.SequenceVar());
             }
@@ -203,10 +214,10 @@ namespace JobShop_flexible
                 }
             }
 
-
+           
 
             // Add dependencies between the tasks related to a job.
-            
+
             for (int job_id = 0; job_id < job_count; ++job_id)
             {
                 List<Task> tasks = data.TasksOfJob(job_id);
@@ -250,8 +261,9 @@ namespace JobShop_flexible
 
             // This decision builder will assign all alternative variables.
             DecisionBuilder alternative_phase =
-                 solver.MakePhase(all_alternative_variables, Solver.CHOOSE_MIN_SIZE,
+                 solver.MakePhase(all_alternative_variables, Solver.CHOOSE_MIN_SIZE_LOWEST_MIN,
                                   Solver.ASSIGN_MIN_VALUE);
+            //original CHOOSE_MIN_SIZE
 
             // This decision builder will rank all tasks on all machines.
             DecisionBuilder sequence_phase =
@@ -304,6 +316,7 @@ namespace JobShop_flexible
 
                     for (int taskIndex = 0; taskIndex < seq.Size(); taskIndex++)
                     {
+                       
                         IntervalVar task = seq.Interval(taskIndex);
 
                         if (task.PerformedExpr().Var().Value() == 1)
@@ -333,19 +346,23 @@ namespace JobShop_flexible
                                 Console.WriteLine(", ends between " +
                                                 endMin + " and " + endMax + ".");
                             }
-
-
+                           
+                            Task solTask = data.TasksOf(task.Name());
+                            Console.WriteLine("J:" + solTask.job_id + "T:" + solTask.TaskIndexForJob);
                         }
                         else
                         {
                             Console.WriteLine("Task " + task.Name() + " was will not be performed on this machine.");
                         }
 
+                        
+                        
                     }
                 }
                 Console.WriteLine("------------------------------------------------");
               
             }
+           
 
             Console.ReadLine();
 
