@@ -13,11 +13,24 @@ namespace csjobshop_flexiblesched
         public List<int> durations;
         public List<TaskDependency> dependencies;
         public int type;
-        public int Start { get; set; }
-        public int End { get; set; }
-        public int MachineID { get; set; }
+
+        public int FixedStart { get; set; }
+        public int FixedEnd { get; set; }
+        public int FixedMachineID { get; set; }
+
+        public int FinalMachineAssignement { get; set; }
         public bool IsFixedStart { get; set; }
         public bool IsFixedEnd { get; set; }
+
+        public long MinStart { get; set; }
+
+        public long MaxStart { get; set; }
+
+        public long MinEnd { get; set; }
+
+        public long MaxEnd { get; set; }
+
+        public long MachineID { get; set; }
         public int TaskIndexForJob;
 
         public Task(int j, List<int> m, List<int> d, int t,int index, List<TaskDependency> dp =null)

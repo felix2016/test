@@ -1,0 +1,8 @@
+C:\Users\fb\Documents\GitHub\test\csharp\solution\bin\Debug\Ski_assignment.exe.config
+C:\Users\fb\Documents\GitHub\test\csharp\solution\bin\Debug\Ski_assignment.exe
+C:\Users\fb\Documents\GitHub\test\csharp\solution\bin\Debug\Ski_assignment.pdb
+C:\Users\fb\Documents\GitHub\test\csharp\solution\bin\Debug\Google.OrTools.dll
+C:\Users\fb\Documents\GitHub\test\csharp\solution\bin\Debug\Google.Protobuf.dll
+C:\Users\fb\Documents\GitHub\test\csharp\solution\obj\x86\Debug\ski_assignment.csprojResolveAssemblyReference.cache
+C:\Users\fb\Documents\GitHub\test\csharp\solution\obj\x86\Debug\Ski_assignment.exe
+C:\Users\fb\Documents\GitHub\test\csharp\solution\obj\x86\Debug\Ski_assignment.pdb

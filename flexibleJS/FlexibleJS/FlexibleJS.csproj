@@ -68,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DurationDemon.cs" />
+    <Compile Include="FixedInterval.cs" />
     <Compile Include="FlexibleJobShopData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

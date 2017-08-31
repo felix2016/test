@@ -13,6 +13,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <ProjectGuid>{57D15461-0A84-4C00-A229-EBBB3D649195}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -57,10 +58,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.OrTools">
-      <HintPath>..\..\..\bin\Google.OrTools.dll</HintPath>
+      <HintPath>..\..\flexibleJS\Google.OrTools.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bin\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\flexibleJS\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

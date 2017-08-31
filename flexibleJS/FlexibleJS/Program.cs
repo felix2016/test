@@ -21,6 +21,7 @@
 
 
 using csjobshop_flexiblesched;
+using FlexibleJS;
 using Google.OrTools.ConstraintSolver;
 
 using System;
@@ -52,11 +53,11 @@ namespace JobShop_flexible
             //LOG(FATAL) << "Please supply a data file with --data_file=";
             //  }
 
-
+            Dictionary<int, List<Task>> finalSolution = new Dictionary<int, List<Task>>();
             Solver solver = new Solver("flexible_jobshop");
             FlexibleJobShopData data = new FlexibleJobShopData();
             data.Load();
-            int machine_count = data.machine_count;
+            // int machine_count = data.machine_count;
             int job_count = data.job_count;
             int horizon = data.horizon;
             int[] setupTime = new int[3];
@@ -68,32 +69,35 @@ namespace JobShop_flexible
             SetupTime.TaskTypeSetupTime.Add(1, 0);
 
             SetupTime.TaskIntervalToTaskType = new Dictionary<IntervalVar, int>();
-            
+
             Console.WriteLine(data.DebugString());
 
             Dictionary<int, List<TaskAlternative>> jobs_to_tasks = new Dictionary<int, List<TaskAlternative>>();
-            for (int i = 0; i < job_count; i++)
+            foreach (KeyValuePair<int, List<Task>> job in data.all_tasks_)
+            // for (int i = 0; i < job_count; i++)
             {
-                jobs_to_tasks[i] = new List<TaskAlternative>();
+                jobs_to_tasks[job.Key] = new List<TaskAlternative>();
             }
             // machines_to_tasks stores the same interval variables as above, but
             // grouped my machines instead of grouped by jobs.
             Dictionary<int, IntervalVarVector> machines_to_tasks = new Dictionary<int, IntervalVarVector>();
-            for (int i = 0; i < machine_count; i++)
+            foreach (int i in data.all_machines)
+            //   for (int i = 0; i < machine_count; i++)
             {
                 machines_to_tasks[i] = new IntervalVarVector();
             }
 
+            foreach (KeyValuePair<int, List<Task>> job in data.all_tasks_)
             // Creates all individual interval variables.
-            for (int job_id = 0; job_id < job_count; ++job_id)
+            // for (int job_id = 0; job_id < job_count; ++job_id)
             {
                 List<Task> tasks =
-                    data.TasksOfJob(job_id);
+                    data.TasksOfJob(job.Key);
                 for (int task_index = 0; task_index < tasks.Count; ++task_index)
                 {
                     Task task = tasks[task_index];
                     //CHECK_EQ(job_id, task.job_id);
-                    jobs_to_tasks[job_id].Add(new TaskAlternative(job_id));
+                    jobs_to_tasks[job.Key].Add(new TaskAlternative(job.Key));
                     bool optional = task.machines.Count > 1;
                     IntVarVector active_variables = new IntVarVector();
                     for (int alt = 0; alt < task.machines.Count; ++alt)
@@ -106,27 +110,27 @@ namespace JobShop_flexible
                                                         alt,
                                                         machine_id,
                                                         duration,
-                                                        task.type );
-                        IntervalVar interval=null;
-                        if (task.IsFixedStart ==false)
+                                                        task.type);
+                        IntervalVar interval = null;
+                        if (task.IsFixedStart == false)
                         {
-                            if(!task.IsFixedEnd)
-                            interval = solver.MakeFixedDurationIntervalVar(
-                                 0, horizon, duration, optional, name);
+                            if (!task.IsFixedEnd)
+                                interval = solver.MakeFixedDurationIntervalVar(
+                                     0, horizon, duration, optional, name);
                             else
                             {
-                                interval = solver.MakeFixedDurationIntervalVar(0, task.End-duration, duration, optional, name);
-                               // interval = solver.MakeIntervalVar(0, horizon, duration, duration, task.End, task.End, optional, name);
+                               interval = solver.MakeFixedDurationIntervalVar(0, task.FixedEnd - duration, duration, optional, name);
+                               
                             }
-                            jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1].intervals.Add(interval);
+                            jobs_to_tasks[job.Key][jobs_to_tasks[job.Key].Count - 1].intervals.Add(interval);
                             machines_to_tasks[machine_id].Add(interval);
-                            
+
                         }
                         else
                         {
-                            if (task.IsFixedStart && machine_id==task.MachineID)
+                            if (task.IsFixedStart && machine_id == task.MachineID)
                             {
-                                interval = solver.MakeFixedDurationIntervalVar(task.Start, task.Start, duration, optional, name);
+                                interval = solver.MakeFixedDurationIntervalVar(task.FixedStart, task.FixedStart, duration, optional, name);
                                 machines_to_tasks[machine_id].Add(interval);
                             }
                             //if (task.IsFixedEnd)
@@ -145,10 +149,10 @@ namespace JobShop_flexible
                         }
 
                     }
-                    string alternative_name = string.Format("J{0}I{1}", job_id, task_index);
+                    string alternative_name = string.Format("J{0}I{1}", job.Key, task_index);
                     IntVar alt_var =
                         solver.MakeIntVar(0, task.machines.Count - 1, alternative_name);
-                    jobs_to_tasks[job_id][jobs_to_tasks[job_id].Count - 1].alternative_variable = alt_var;
+                    jobs_to_tasks[job.Key][jobs_to_tasks[job.Key].Count - 1].alternative_variable = alt_var;
                     if (optional)
                     {
                         solver.Add(solver.MakeMapDomain(alt_var, active_variables));
@@ -158,13 +162,14 @@ namespace JobShop_flexible
 
             // Collect alternative variables.
             IntVarVector all_alternative_variables = new IntVarVector();
-            for (int job_id = 0; job_id < job_count; ++job_id)
+            foreach (KeyValuePair<int, List<Task>> job in data.all_tasks_)
+            //  for (int job_id = 0; job_id < job_count; ++job_id)
             {
-                int task_count = jobs_to_tasks[job_id].Count;
+                int task_count = jobs_to_tasks[job.Key].Count;
                 for (int task_index = 0; task_index < task_count; ++task_index)
                 {
                     IntVar alternative_variable =
-                         jobs_to_tasks[job_id][task_index].alternative_variable;
+                         jobs_to_tasks[job.Key][task_index].alternative_variable;
 
                     if (!alternative_variable.Bound())
                     {
@@ -177,33 +182,40 @@ namespace JobShop_flexible
             // sequence variables. A sequence variable is a dedicated variable
             // whose job is to sequence interval variables.
             SequenceVarVector all_sequences = new SequenceVarVector();
-            List<SetupTime> all_distances= new List<SetupTime> ();
+            List<SetupTime> all_distances = new List<SetupTime>();
 
             DisjunctiveConstraint ct;
-            for (int machine_id = 0; machine_id < machine_count; ++machine_id)
+            foreach (KeyValuePair<int, IntervalVarVector> machine in machines_to_tasks)
+            //for (int machine_id = 0; machine_id < machine_count; ++machine_id)
             {
+                int machine_id = machine.Key;
                 string name = string.Format("Machine_{0}", machine_id);
-                 ct =   solver.MakeDisjunctiveConstraint(machines_to_tasks[machine_id], name);
+                ct = solver.MakeDisjunctiveConstraint(machines_to_tasks[machine_id], name);
+                for (int i = 0; i < machines_to_tasks[machine_id].Count; i++)
+                {
+                    DurationDemon d = new DurationDemon { task = machines_to_tasks[machine_id][i], machin = machine_id, BlockedIntervals = data.MachinesBlockedIntervals[machine_id] };
+                    machines_to_tasks[machine_id][i].WhenStartBound(d);
+                }
 
+                SetupTime distances = new SetupTime(machines_to_tasks[machine_id]);
+                all_distances.Add(distances);
 
-                 SetupTime distances = new SetupTime(machines_to_tasks[machine_id]);
-                 all_distances.Add(distances);
-
-                 ct.SetTransitionTime(distances);
+                ct.SetTransitionTime(distances);
                 solver.Add(ct);
                 all_sequences.Add(ct.SequenceVar());
             }
 
             // Creates array of end_times of jobs.
             IntVarVector all_ends = new IntVarVector();
-            for (int job_id = 0; job_id < job_count; ++job_id)
+            foreach (KeyValuePair<int, List<Task>> job in data.all_tasks_)
+            //for (int job_id = 0; job_id < job_count; ++job_id)
             {
 
 
-                for (int task_index = 0; task_index < jobs_to_tasks[job_id].Count; ++task_index)
+                for (int task_index = 0; task_index < jobs_to_tasks[job.Key].Count; ++task_index)
                 {
 
-                    TaskAlternative task_alt = jobs_to_tasks[job_id][task_index];
+                    TaskAlternative task_alt = jobs_to_tasks[job.Key][task_index];
                     for (int alt = 0; alt < task_alt.intervals.Count; ++alt)
                     {
                         IntervalVar t = task_alt.intervals[alt];
@@ -214,14 +226,14 @@ namespace JobShop_flexible
                 }
             }
 
-           
+
 
             // Add dependencies between the tasks related to a job.
-
-            for (int job_id = 0; job_id < job_count; ++job_id)
+            foreach (KeyValuePair<int, List<Task>> job in data.all_tasks_)
+            //    for (int job_id = 0; job_id < job_count; ++job_id)
             {
-                List<Task> tasks = data.TasksOfJob(job_id);
-                for (int task_index = 0; task_index < tasks.Count ; ++task_index)
+                List<Task> tasks = data.TasksOfJob(job.Key);
+                for (int task_index = 0; task_index < tasks.Count; ++task_index)
                 {
                     if (tasks[task_index].dependencies != null)
                     {
@@ -230,24 +242,24 @@ namespace JobShop_flexible
                             var other_jobid = dep.OtherTask.job_id;
                             var other_taskid = data.TasksOfJob(other_jobid).IndexOf(dep.OtherTask);
 
-                            TaskAlternative task_alt = jobs_to_tasks[job_id][task_index];
+                            TaskAlternative task_alt = jobs_to_tasks[job.Key][task_index];
                             TaskAlternative task_alt_other_task = jobs_to_tasks[other_jobid][other_taskid];
-                            foreach (var alt in task_alt.intervals )
+                            foreach (var alt in task_alt.intervals)
                             {
                                 foreach (var other_alt in task_alt_other_task.intervals)
                                 {
-                                    solver.Add (alt.StartsAfterStartWithDelay(other_alt, dep.Delay));
+                                    solver.Add(alt.StartsAfterStartWithDelay(other_alt, dep.Delay));
                                 }
 
                             }
-                            
+
 
                         }
-                        
+
                     }
 
 
-                    
+
                 }
             }
 
@@ -306,17 +318,19 @@ namespace JobShop_flexible
 
             solver.NewSearch(main_phase, objective_monitor, search_log);
             //solver.NewSearch(main_phase, objectiveAssessment, search_log);
-            
+
             while (solver.NextSolution())
             {
-                for (int m = 0; m < machine_count; ++m)
+                //  foreach (KeyValuePair<int, IntervalVarVector> machine in machines_to_tasks)
+                for (int m = 0; m < data.all_machines.Count; ++m)
                 {
                     Console.WriteLine("Machine " + m + " :");
+
                     SequenceVar seq = all_sequences[m];
 
                     for (int taskIndex = 0; taskIndex < seq.Size(); taskIndex++)
                     {
-                       
+
                         IntervalVar task = seq.Interval(taskIndex);
 
                         if (task.PerformedExpr().Var().Value() == 1)
@@ -346,8 +360,15 @@ namespace JobShop_flexible
                                 Console.WriteLine(", ends between " +
                                                 endMin + " and " + endMax + ".");
                             }
-                           
+
                             Task solTask = data.TasksOf(task.Name());
+                            solTask.MinStart = startMin;
+                            solTask.MaxStart = startMax;
+                            solTask.MinEnd = endMin;
+                            solTask.MaxEnd = endMax;
+                            if (!finalSolution.ContainsKey(solTask.FinalMachineAssignement))
+                                finalSolution[solTask.FinalMachineAssignement] = new List<Task>();
+                            finalSolution[solTask.FinalMachineAssignement].Add(solTask);
                             Console.WriteLine("J:" + solTask.job_id + "T:" + solTask.TaskIndexForJob);
                         }
                         else
@@ -355,14 +376,14 @@ namespace JobShop_flexible
                             Console.WriteLine("Task " + task.Name() + " was will not be performed on this machine.");
                         }
 
-                        
-                        
+
+
                     }
                 }
                 Console.WriteLine("------------------------------------------------");
-              
+
             }
-           
+
 
             Console.ReadLine();
 
@@ -376,12 +397,12 @@ namespace JobShop_flexible
 
     public class JobshopAssessment : SearchMonitor
     {
-        
-        public JobshopAssessment(Solver s): base(s)
+
+        public JobshopAssessment(Solver s) : base(s)
         {
-            
+
         }
-    
+
         public IntVarVector all_ends;
         private long bestObjectiveValue = Int64.MaxValue;
         int slNo = 0;
@@ -397,32 +418,32 @@ namespace JobShop_flexible
             if (result)
             {
                 long max = 0;// Int64.MinValue;
-           // Console.WriteLine("===========");
+                             // Console.WriteLine("===========");
                 var s = "";
-            foreach (var item in all_ends)
-            {
-                if (item.Bound() )
+                foreach (var item in all_ends)
                 {
-                   // max = Math.Max(item.Value(), max);
-                    max+= item.Value();
-                    s += item.Value() + ", ";
-                    //Console.WriteLine(item.Value() + "  "+ max);
+                    if (item.Bound())
+                    {
+                        // max = Math.Max(item.Value(), max);
+                        max += item.Value();
+                        s += item.Value() + ", ";
+                        //Console.WriteLine(item.Value() + "  "+ max);
+                    }
+                    else
+                    {
+                        //Console.WriteLine(item.Max() + "  " + max);
+                        max += item.Min();
+                        s += item.Min() + ", ";
+                    }
                 }
-                else
+                if (bestObjectiveValue >= max)
                 {
-                    //Console.WriteLine(item.Max() + "  " + max);
-                    max+= item.Min();
-                    s += item.Min() + ", ";
-                }
-            }
-            if (bestObjectiveValue >= max)
-            {
-                bestObjectiveValue = max;
+                    bestObjectiveValue = max;
 
-               Console.WriteLine("acepted=================== # " + slNo + " Objective Value:" + bestObjectiveValue + " s= " + s);
-                slNo++;
-                return true;
-            }
+                    Console.WriteLine("acepted=================== # " + slNo + " Objective Value:" + bestObjectiveValue + " s= " + s);
+                    slNo++;
+                    return true;
+                }
 
             }
             return false;
@@ -430,8 +451,8 @@ namespace JobShop_flexible
         public override bool AtSolution()
         {
 
-             Console.WriteLine("Solution # " + slNo + " Objective Value:" + bestObjectiveValue);
-             return base.AtSolution();
+            Console.WriteLine("Solution # " + slNo + " Objective Value:" + bestObjectiveValue);
+            return base.AtSolution();
         }
 
     }

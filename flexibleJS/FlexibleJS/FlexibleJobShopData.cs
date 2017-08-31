@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlexibleJS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,13 @@ namespace csjobshop_flexiblesched
     public class FlexibleJobShopData
     {
         public string name { get; set; }
-        public int machine_count { get; set; }
+        //public int machine_count { get; set; }
         public int job_count { get; set; }
         public int horizon { get; set; }
-        public int current_job_index { get; set; }
+        //public int current_job_index { get; set; }
         public Dictionary<int, List<Task>> all_tasks_ = new Dictionary<int, List<Task>>();
-
+        public List<int> all_machines { get; set; }
+        public Dictionary<int, List<FixedInterval>> MachinesBlockedIntervals = new Dictionary<int, List<FixedInterval>>();
         public FlexibleJobShopData()
 
         {
@@ -32,42 +34,67 @@ namespace csjobshop_flexiblesched
             //10  1   2   11  1   1   64  1   8   67  1   5   85  1   4   10  1   6   73  1   10  38  1   9   95  1   7   97  1   3   17
             //10  1   5   60  1   9   32  1   3   95  1   4   93  1   2   65  1   7   85  1   8   43  1   10  85  1   6   46  1   1   59
             name = "";
-            machine_count = -1;
+          //  machine_count = -1;
             job_count = -1;
             horizon = 0;
-            for (int i = 0; i < 3; i++)
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    all_tasks_[i] = new List<Task>();
+            //}
+
+        }
+
+        public void InitScheduler(int machineNumber, int numberOfJobs)
+        {
+            for (int i = 0; i < numberOfJobs; i++)
             {
                 all_tasks_[i] = new List<Task>();
             }
-
         }
+
+
         public void Load()
         {
 
-            job_count = 3;
-            machine_count = 3;
+            // // job_count = 3;
+
+            // // machine_count = 3;
+            all_machines = new List<int>();
+            all_machines.Add(0);
+            MachinesBlockedIntervals[0] = new List<FixedInterval>();
+            all_machines.Add(1);
+            MachinesBlockedIntervals[1] = new List<FixedInterval>();
+            all_machines.Add(5);
+            MachinesBlockedIntervals[5] = new List<FixedInterval>();
+          
+            //blocked intervals 
+            FixedInterval f1 = new FixedInterval();
+            f1.Start = 11;
+            f1.End = 13;
+            MachinesBlockedIntervals[0].Add(f1);
+
             List<int> machines = new List<int>();
             List<int> durations = new List<int>();
             machines.Add(0);
-            durations.Add(2);
+            durations.Add(3);
             machines.Add(1);
             durations.Add(2);
-            machines.Add(2);
+            machines.Add(5);
             durations.Add(18);
             AddTask(0, machines, durations);
             machines = new List<int>();
             durations = new List<int>();
             machines.Add(0);
-            durations.Add(20);
+            durations.Add(10);
             machines.Add(1);
             durations.Add(25);
-            machines.Add(2);
+            machines.Add(5);
             durations.Add(27);
-           // AddTask(0, machines, durations, 1);
+            // AddTask(0, machines, durations, 1);
             AddTask(0, machines, durations);
-            var task = TasksOfJob(0)[0] ;
+            var task = TasksOfJob(0)[0];
             var otherTask = TasksOfJob(0)[1];
-            task.dependencies.Add(new TaskDependency() { OtherTask = otherTask, Delay =12 }); // task 0 starts after task 1 is started with 12 unit of time delay
+            task.dependencies.Add(new TaskDependency() { OtherTask = otherTask, Delay = 12 }); // task 0 starts after task 1 is started with 12 unit of time delay
 
 
 
@@ -77,23 +104,81 @@ namespace csjobshop_flexiblesched
             durations.Add(7);
             machines.Add(1);
             durations.Add(7);
-            machines.Add(2);
+            machines.Add(5);
             durations.Add(4);
             AddTask(0, machines, durations);
 
             task = TasksOfJob(0)[2];
             //make task fixed
-            task.IsFixed = true;
+            task.IsFixedStart = true;
             task.MachineID = 1;
-            task.Start = 40;
+            task.FixedStart = 3;
 
 
             otherTask = TasksOfJob(0)[0];
             task.dependencies.Add(new TaskDependency() { OtherTask = otherTask, Delay = 10 }); // task 2 starts after task 0 is started with 10 unit of time delay
 
-            current_job_index = 3;
+            machines = new List<int>();
+            durations = new List<int>();
+            machines.Add(1);
+            durations.Add(3);
+            //machines.Add(1);
+            //durations.Add(9);
+            //machines.Add(2);
+            //durations.Add(9);
+            AddTask(4, machines, durations);
+            //task = TasksOfJob(4)[0];
+            //task.IsFixedEnd = true;
+            //task.FixedEnd = 9;
 
 
+
+
+            /// current_job_index = 3;
+
+
+            // List<int> machines = new List<int>();
+            // List<int> durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(54);
+            // AddTask(31, machines, durations);
+            //  machines = new List<int>();
+            //durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(135);
+            // AddTask(32, machines, durations);
+            //  machines = new List<int>();
+            // durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(277);
+            // AddTask(33, machines, durations);
+            // machines = new List<int>();
+            // durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(322);
+            // AddTask(34, machines, durations);
+            // machines = new List<int>();
+            // durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(327);
+            // AddTask(35, machines, durations);
+            // machines = new List<int>();
+            // durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(655);
+            // AddTask(36, machines, durations);
+            // machines = new List<int>();
+            // durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(655);
+            // AddTask(37, machines, durations);
+            // machines = new List<int>();
+            // durations = new List<int>();
+            // machines.Add(1);
+            // durations.Add(655);
+            // AddTask(38, machines, durations);
+            // all_machines = new List<int>();
+            // all_machines.Add(1);
 
         }
 
@@ -102,19 +187,34 @@ namespace csjobshop_flexiblesched
             return all_tasks_[job_id];
         }
 
+        public Task TasksOf(string Name) //int machine, int taskIndex
+        {
+            int startJ = Name.IndexOf("J") + 1;
+            int endJ = Name.IndexOf("I", startJ);
+            int jobId = 0;
+            Int32.TryParse(Name.Substring(startJ, endJ - startJ), out jobId);
+            int startT = Name.IndexOf("I") + 1;
+            int endT = Name.IndexOf("A", startT);
+            int taskIndex = 0;
+            Int32.TryParse(Name.Substring(startT, endT - startT), out taskIndex);
+            return all_tasks_[jobId][taskIndex];
+           
+        }
+
 
         public string DebugString()
         {
             StringBuilder ret = new StringBuilder();
             ret.Append(string.Format("FlexibleJobshop(name = {0}, {1} machines, {2} jobs)\n",
-                         name, machine_count, job_count));
-            for (int j = 0; j < all_tasks_.Count; ++j)
+                         name, all_machines.Count, job_count));
+            foreach (KeyValuePair<int, List<Task>> j in all_tasks_)
+                //for (int j = 0; j < all_tasks_.Count; ++j)
             {
                 ret.Append(string.Format("  job {0}: ", j));
-                for (int k = 0; k < all_tasks_[j].Count; ++k)
+                for (int k = 0; k < all_tasks_[j.Key].Count; ++k)
                 {
-                    ret.Append(all_tasks_[j][k].DebugString());
-                    if (k < all_tasks_[j].Count - 1)
+                    ret.Append(all_tasks_[j.Key][k].DebugString());
+                    if (k < all_tasks_[j.Key].Count - 1)
                     {
                         ret.Append(" -> ");
                     }
@@ -137,10 +237,12 @@ namespace csjobshop_flexiblesched
             return result;
         }
 
-        void AddTask(int job_id, List<int> machines,
-               List<int> durations, int t =0)
+        public void AddTask(int job_id, List<int> machines,
+               List<int> durations, int t = 0)
         {
-            all_tasks_[job_id].Add(new Task(job_id, machines, durations, t));
+            if (!all_tasks_.ContainsKey(job_id))
+                all_tasks_[job_id] = new List<Task>();
+            all_tasks_[job_id].Add(new Task(job_id, machines, durations, t, all_tasks_[job_id].Count));
             horizon += SumOfDurations(durations);
         }
 
