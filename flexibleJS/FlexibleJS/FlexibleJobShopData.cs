@@ -110,9 +110,9 @@ namespace csjobshop_flexiblesched
 
             task = TasksOfJob(0)[2];
             //make task fixed
-            task.IsFixedStart = true;
+           // task.IsFixedStart = true;
             task.MachineID = 1;
-            task.FixedStart = 3;
+           // task.FixedStart = 3;
 
 
             otherTask = TasksOfJob(0)[0];

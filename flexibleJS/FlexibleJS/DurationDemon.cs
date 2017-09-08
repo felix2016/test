@@ -12,25 +12,33 @@ namespace FlexibleJS
         public int machin;
         public IntervalVar task;
         public List<FixedInterval> BlockedIntervals;
+        public long Duration { get; set; }
         public override void Run(Solver solver)
         {
             base.Run(solver);
-            long duration = 0;
+            long duration = Duration;
             foreach (FixedInterval fixedInt in BlockedIntervals)
             {
                 if (task.StartExpr().Var().Value() >= fixedInt.Start && task.StartExpr().Var().Value() < fixedInt.End)
                     duration = -1;
-                else if (task.StartExpr().Var().Value() <= fixedInt.Start && task.EndExpr().Var().Value()> fixedInt.Start && duration != -1)
+                else if (task.StartExpr().Var().Value() <= fixedInt.Start && task.StartExpr().Var().Value() + duration + 3 > fixedInt.Start && duration != -1)
                 {
-                    duration = duration + task.DurationExpr().Var().Value();
+                    duration = duration + fixedInt.End - fixedInt.Start;
                 }
 
             }
-            //task.StartExpr().Var().Value();
-            if (duration != 0)
-                task.SafeDurationExpr(duration);//.SetDurationMax(duration);
+
+            if (duration == -1)
+            {
+                task.SafeDurationExpr(-1);
+
+            }
+            else
+                task.DurationExpr().Var().SetValue(duration);
+
 
         }
 
     }
+
 }

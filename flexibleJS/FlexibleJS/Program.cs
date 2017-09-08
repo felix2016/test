@@ -115,12 +115,13 @@ namespace JobShop_flexible
                         if (task.IsFixedStart == false)
                         {
                             if (!task.IsFixedEnd)
-                                interval = solver.MakeFixedDurationIntervalVar(
-                                     0, horizon, duration, optional, name);
+                                //interval = solver.MakeFixedDurationIntervalVar(
+                                //     0, horizon, duration, optional, name);
+                                interval = solver.MakeIntervalVar(0, horizon - duration, -1, duration, duration, horizon, optional, name);
                             else
                             {
-                               interval = solver.MakeFixedDurationIntervalVar(0, task.FixedEnd - duration, duration, optional, name);
-                               
+                                //interval = solver.MakeFixedDurationIntervalVar(0, task.FixedEnd - duration, duration, optional, name);
+                                interval = solver.MakeIntervalVar(0, horizon - duration, -1, duration, task.FixedEnd, task.FixedEnd, optional, name);
                             }
                             jobs_to_tasks[job.Key][jobs_to_tasks[job.Key].Count - 1].intervals.Add(interval);
                             machines_to_tasks[machine_id].Add(interval);
@@ -130,7 +131,8 @@ namespace JobShop_flexible
                         {
                             if (task.IsFixedStart && machine_id == task.MachineID)
                             {
-                                interval = solver.MakeFixedDurationIntervalVar(task.FixedStart, task.FixedStart, duration, optional, name);
+                                // interval = solver.MakeFixedDurationIntervalVar(task.FixedStart, task.FixedStart, duration, optional, name);
+                                interval = solver.MakeIntervalVar(task.FixedStart, task.FixedStart, -1, horizon, duration, horizon, optional, name);
                                 machines_to_tasks[machine_id].Add(interval);
                             }
                             //if (task.IsFixedEnd)
@@ -193,7 +195,8 @@ namespace JobShop_flexible
                 ct = solver.MakeDisjunctiveConstraint(machines_to_tasks[machine_id], name);
                 for (int i = 0; i < machines_to_tasks[machine_id].Count; i++)
                 {
-                    DurationDemon d = new DurationDemon { task = machines_to_tasks[machine_id][i], machin = machine_id, BlockedIntervals = data.MachinesBlockedIntervals[machine_id] };
+                    Task orTask = data.TasksOf(machines_to_tasks[machine_id][i].Name());
+                    DurationDemon d = new DurationDemon { task = machines_to_tasks[machine_id][i], machin = machine_id, BlockedIntervals = data.MachinesBlockedIntervals[machine_id], Duration = orTask.durations[orTask.machines.IndexOf(machine_id)] };
                     machines_to_tasks[machine_id][i].WhenStartBound(d);
                 }
 
