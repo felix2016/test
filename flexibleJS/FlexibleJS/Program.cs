@@ -117,11 +117,11 @@ namespace JobShop_flexible
                             if (!task.IsFixedEnd)
                                 //interval = solver.MakeFixedDurationIntervalVar(
                                 //     0, horizon, duration, optional, name);
-                                interval = solver.MakeIntervalVar(0, horizon - duration, -1, duration, duration, horizon, optional, name);
+                                interval = solver.MakeIntervalVar(0, horizon - duration, -1, horizon, duration, horizon, optional, name);
                             else
                             {
                                 //interval = solver.MakeFixedDurationIntervalVar(0, task.FixedEnd - duration, duration, optional, name);
-                                interval = solver.MakeIntervalVar(0, horizon - duration, -1, duration, task.FixedEnd, task.FixedEnd, optional, name);
+                                interval = solver.MakeIntervalVar(0, horizon - duration, -1, horizon, task.FixedEnd, task.FixedEnd, optional, name);
                             }
                             jobs_to_tasks[job.Key][jobs_to_tasks[job.Key].Count - 1].intervals.Add(interval);
                             machines_to_tasks[machine_id].Add(interval);
