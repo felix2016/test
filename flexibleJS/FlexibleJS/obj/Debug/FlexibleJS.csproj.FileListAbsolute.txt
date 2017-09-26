@@ -13,3 +13,4 @@ C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\bin\Debug\G
 C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.csprojResolveAssemblyReference.cache
 C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.exe
 C:\Users\baza\Dropbox\PostDoc_Projects\JobShop\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.pdb
+C:\Users\fb\Documents\GitHub\test\flexibleJS\FlexibleJS\obj\Debug\FlexibleJS.csprojResolveAssemblyReference.cache

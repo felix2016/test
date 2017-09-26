@@ -1,12 +1,38 @@
 ﻿using Google.OrTools.ConstraintSolver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FlexibleJS
 {
+
+    public class StartBoundedDemon : NetDemon
+    {
+        public int machin;
+        public IntervalVar task;
+        public List<FixedInterval> BlockedIntervals;
+        public long Duration { get; set; }
+        public override void Run(Solver solver)
+        {
+
+            Debug.WriteLine(" start is bound " + task.StartMin() + " " + task.StartMax() + " " + task.DurationMin() + " " + task.DurationMax());
+        }
+    }
+    public class DurationBoundedDemon : NetDemon
+    {
+        public int machin;
+        public IntervalVar task;
+        public List<FixedInterval> BlockedIntervals;
+        public long Duration { get; set; }
+        public override void Run(Solver solver)
+        {
+
+            Debug.WriteLine("duration bound " + task.StartMin() + " " + task.StartMax() + " " + task.DurationMin() + " " + task.DurationMax());
+        }
+    }
     public class DurationDemon : NetDemon
     {
         public int machin;
@@ -35,6 +61,7 @@ namespace FlexibleJS
             }
             else
                 task.DurationExpr().Var().SetValue(duration);
+            solver.Fail();
 
 
         }

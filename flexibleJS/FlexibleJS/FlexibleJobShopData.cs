@@ -69,9 +69,13 @@ namespace csjobshop_flexiblesched
           
             //blocked intervals 
             FixedInterval f1 = new FixedInterval();
-            f1.Start = 11;
-            f1.End = 13;
+            f1.Start = 7;
+            f1.End = 15;
             MachinesBlockedIntervals[0].Add(f1);
+            FixedInterval f2 = new FixedInterval();
+            f2.Start = 12;
+            f2.End = 13;
+            MachinesBlockedIntervals[1].Add(f2);
 
             List<int> machines = new List<int>();
             List<int> durations = new List<int>();
